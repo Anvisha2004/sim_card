@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deactivate SIM Card</title>
+    <script>
+        async function deactivateSim(event) {
+            event.preventDefault();
+            const simNumber = document.getElementById('sim_number').value;
+
+            const response = await fetch('/deactivate/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ sim_number: simNumber })
+            });
+
+            const data = await response.json();
+            alert(data.message || data.error);
+        }
+    </script>
+</head>
+<body>
+    <h1>Deactivate SIM Card</h1>
+    <form onsubmit="deactivateSim(event)">
+        <label for="sim_number">Sim Card Number:</label>
+        <input type="text" id="sim_number" name="sim_number" required>
+        <input type="submit" value="Deactivate">
+    </form>
+</body>
+</html>
+

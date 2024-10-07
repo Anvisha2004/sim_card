@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Card Details</title>
+    <script>
+        async function getSimDetails(event) {
+            event.preventDefault();
+            const simNumber = document.getElementById('sim_number').value;
+
+            const response = await fetch(`/sim-details/${simNumber}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            if (data.error) {
+                alert(data.error);
+            } else {
+                document.getElementById('sim_details').innerHTML = `
+                    <h2>Details for SIM Card ${data.sim_number}</h2>
+                    <p>Status: ${data.status}</p>
+                    <p>Activation Date: ${data.activation_date}</p>
+                `;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>SIM Card Details</h1>
+    <form onsubmit="getSimDetails(event)">
+        <label for="sim_number">Sim Card Number:</label>
+        <input type="text" id="sim_number" name="sim_number" required>
+        <input type="submit" value="Get Details">
+    </form>
+    <div id="sim_details"></div>
+</body>
+</html>

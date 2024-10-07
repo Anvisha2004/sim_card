@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate SIM Card</title>
+    <script>
+        async function activateSim(event) {
+            event.preventDefault();
+            const simNumber = document.getElementById('sim_number').value;
+
+            const response = await fetch('/activate/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ sim_number: simNumber })
+            });
+
+            const data = await response.json();
+            alert(data.message || data.error);
+        }
+    </script>
+</head>
+<body>
+    <h1>Activate SIM Card</h1>
+    <form onsubmit="activateSim(event)">
+        <label for="sim_number">Sim Card Number:</label>
+        <input type="text" id="sim_number" name="sim_number" required>
+        <input type="submit" value="Activate">
+    </form>
+</body>
+</html>
